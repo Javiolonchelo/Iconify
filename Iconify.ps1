@@ -30,8 +30,7 @@ if (!(Get-Command magick.exe)) {
 
 # Help message
 if (!$in) {
-    get-help .\Iconify.ps1
-    exit
+    Throw "Usage: .\Iconify.ps1 -in {image} -out {output_ico_file}"
 }
 
 # Adds .ico extension if not present
@@ -41,3 +40,9 @@ if ($out -notlike "*.ico") {
 
 # Converts image to icon
 convert -background transparent $in -define "icon:auto-resize=16,24,32,48,64,72,96,128,256" $out
+
+# trim all first characters until last backslash
+$in = ForEach-Object { $in -replace '.*\\' }
+$out = ForEach-Object { $out -replace '.*\\' }
+
+Write-Output "The file `"$in`" was succesfully converted to `"$out`""
